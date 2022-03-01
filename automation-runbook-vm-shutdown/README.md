@@ -8,6 +8,9 @@ This module is to setup a Azure Automation Runbook to start or stop VMs within a
 Below is the standard example setup
 
 ```tfvars
+# =================================================================
+# =================        env tfvar         ======================
+# =================================================================
 product = "cvp"
 env = "sbox"
 automation_account_sku_name = "Basic"
@@ -44,7 +47,9 @@ resource "azurerm_automation_account" "vm-start-stop" {
   tags = local.common_tags
 }
 
-#  vm shutdown/start runbook module
+# =================================================================
+# ==========    vm shutdown/start runbook module    ===============
+# =================================================================
 module "vm_automation" {
   count = var.vm_status.vm_change_status == true ? 1 : 0
 
