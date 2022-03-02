@@ -17,7 +17,7 @@ automation_account_sku_name = "Basic"
 script_name  = "./modules/automation-runbook-vm-shutdown/vm-start-stop.ps1"
 vm_status = {
   "vm_resting_state_on" = false
-  "vm_change_status"    = true
+  "auto_acc_change_vm_status"    = true
 }
 runbook_schedule_times = {
   "frequency"  = "Day"
@@ -32,7 +32,7 @@ runbook_schedule_times = {
 # =================================================================
 
 resource "azurerm_automation_account" "vm-start-stop" {
-  count = var.vm_status.vm_change_status == true ? 1 : 0
+  count = var.vm_status.auto_acc_change_vm_status == true ? 1 : 0
 
   name                = "${var.product}-recordings-${var.env}-aa"
   location            = var.location
@@ -51,7 +51,7 @@ resource "azurerm_automation_account" "vm-start-stop" {
 # ==========    vm shutdown/start runbook module    ===============
 # =================================================================
 module "vm_automation" {
-  count = var.vm_status.vm_change_status == true ? 1 : 0
+  count = var.vm_status.auto_acc_change_vm_status == true ? 1 : 0
 
   source                  = "./modules/automation-runbook-vm-shutdown"
   automation_account_name = azurerm_automation_account.vm-start-stop[0].name

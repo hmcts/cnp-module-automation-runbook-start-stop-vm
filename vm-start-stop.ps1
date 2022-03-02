@@ -13,7 +13,7 @@ Param(
     $vm_resting_state_on,
     [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()]
 	[bool]
-    $vm_change_status
+    $auto_acc_change_vm_status
 )
 
 Write-Output "Script started at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
@@ -31,7 +31,7 @@ $VMssplit = $vmlist.Split(",")
 
 # Loop through one or more VMs which will be passed in from the terraform as a list
 # If the list is empty it will skip the block
-if ( $vm_change_status -eq $true){
+if ( $auto_acc_change_vm_status -eq $true){
     foreach ($VM in $VMs){
         try { # Get status of VM
         $status = (Get-AzVM -ResourceGroupName $resourcegroup -Name $VM -Status -DefaultProfile $AzureContext).Statuses[1].Code

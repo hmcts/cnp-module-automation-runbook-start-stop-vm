@@ -59,7 +59,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
     vmlist              = local.vm_names
     resourcegroup       = local.resource_group_name
     vm_resting_state_on = var.vm_status.vm_resting_state_on
-    vm_change_status    = var.vm_status.vm_change_status
+    auto_acc_change_vm_status    = var.vm_status.auto_acc_change_vm_status
   }
 
   depends_on = [
