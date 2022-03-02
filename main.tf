@@ -55,11 +55,11 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
   runbook_name            = azurerm_automation_runbook.vm-start-stop.name
 
   parameters = {
-    mi_principal_id     = azurerm_user_assigned_identity.cvp-automation-account-mi.principal_id
-    vmlist              = local.vm_names
-    resourcegroup       = local.resource_group_name
-    vm_resting_state_on = var.vm_status.vm_resting_state_on
-    auto_acc_change_vm_status    = var.vm_status.auto_acc_change_vm_status
+    mi_principal_id               = azurerm_user_assigned_identity.cvp-automation-account-mi.principal_id
+    vmlist                        = local.vm_names
+    resourcegroup                 = local.resource_group_name
+    vm_resting_state_on           = var.vm_status.vm_resting_state_on
+    azdo_pipe_to_change_vm_status = var.vm_status.azdo_pipe_to_change_vm_status
   }
 
   depends_on = [
