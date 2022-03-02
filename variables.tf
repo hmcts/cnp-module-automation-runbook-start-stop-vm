@@ -19,8 +19,12 @@ variable "publish_content_link" {
   type        = string
   description = "source of ps1 script"
 }
-variable "vm_status" {
-  default = {}
+variable "azdo_pipe_to_change_vm_status" {
+  description = "Should azdo pipeline change the status of the VMs"
+  default     = false
+}
+variable "vm_resting_state_on" {
+  description = "The desired resting state i.e. on/off for VMs"
 }
 variable "resource_group_id" {
   type        = string
