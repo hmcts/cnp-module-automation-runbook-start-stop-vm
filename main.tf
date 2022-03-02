@@ -41,7 +41,7 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   interval                = var.runbook_schedule_times.interval
   timezone                = local.timezone
   start_time              = local.start_time
-  description             = "This is a scheduled to stop or start VMs at ${local.start_time}"
+  description             = local.start_time == null ? "This is a schedule to stop or start VMs" : "This is a scheduled to stop or start VMs at ${local.start_time}"
 
   depends_on = [
     azurerm_automation_runbook.vm-start-stop
