@@ -1,9 +1,9 @@
 ################## VM Automation account managed identity ##################
 # Create a user-assigned managed identity
 resource "azurerm_user_assigned_identity" "cvp-automation-account-mi" {
-  resource_group_name = var.auto_acc_runbook_names.resource_group_name
+  resource_group_name = local.resource_group_name
   location            = var.location
-  name                = var.auto_acc_runbook_names.user_assigned_identity_name
+  name                = local.user_assigned_identity_name
   tags                = var.tags
 }
 
@@ -14,7 +14,7 @@ output "cvp_aa_mi_id" {
 
 # Create a custom, limited role for our managed identity
 resource "azurerm_role_definition" "virtual-machine-control" {
-  name        = var.auto_acc_runbook_names.role_definition_name
+  name        = local.role_definition_name
   scope       = var.resource_group_id
   description = "Custom Role for controlling virtual machines"
   permissions {

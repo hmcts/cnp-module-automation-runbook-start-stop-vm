@@ -15,6 +15,10 @@ variable "automation_account_name" {
   type        = string
   description = "automation account name"
 }
+variable "publish_content_link" {
+  type        = string
+  description = "source of ps1 script"
+}
 variable "vm_status" {
   default = {}
 }
