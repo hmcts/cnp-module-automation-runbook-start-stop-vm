@@ -14,13 +14,13 @@ Below is the standard example setup
 product = "cvp"
 env = "sbox"
 automation_account_sku_name = "Basic"
-script_name  = "./modules/automation-runbook-vm-shutdown/vm-start-stop.ps1"
-vm_resting_state_on = false
+script_name                   = "/.terraform/modules/vm_automation/vm-start-stop.ps1"
+vm_resting_state_on           = false
 azdo_pipe_to_change_vm_status = true
 runbook_schedule_times = {
-  "frequency"  = "Day"
-  "interval"   = 1
-  "timezone"   = "Europe/London"
+  "frequency" = "Day"
+  "interval"  = 1
+  "timezone"  = "Europe/London"
 }
 ```
 
@@ -58,7 +58,7 @@ module "vm_automation" {
   resource_group_id             = module.wowza.wowza_rg_id
   azdo_pipe_to_change_vm_status = var.azdo_pipe_to_change_vm_status
   vm_resting_state_on           = var.vm_resting_state_on
-  runbook_schedule_times        = var.runbook_schedule_times
+  runbook_schedule_times        = merge(var.runbook_schedule_times, { "start_time" = "${formatdate("YYYY-MM-DD", timestamp())}T19:00:00Z" })
   publish_content_link          = "https://raw.githubusercontent.com/hmcts/cnp-module-automation-runbook-start-stop-vm/master/vm-start-stop.ps1"
   tags                          = local.common_tags
   auto_acc_runbook_names = {
