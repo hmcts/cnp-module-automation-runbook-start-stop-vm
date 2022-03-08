@@ -10,7 +10,7 @@ Param(
     $resourcegroup,    
     [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] 
     [bool] 
-    $vmStateOn
+    $vm_state_on
 )
 
 Write-Output "Script started at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
@@ -38,7 +38,7 @@ foreach ($VM in $VMs){
         Break
     }
 
-    if ( $vmStateOn -eq $false -and "PowerState/running","PowerState/starting","PowerState/unknown" -contains $status) {
+    if ( $vm_state_on -eq $false -and "PowerState/running","PowerState/starting","PowerState/unknown" -contains $status) {
         Write-Output "The vm will be turned off" 
         try{
             Stop-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext -Force
@@ -47,7 +47,7 @@ foreach ($VM in $VMs){
             Write-Error ("Error stopping the VM $VM : " + $ErrorMessage)
             Break
         }
-    } elseif( $vmStateOn -eq $true -and "PowerState/deallocated","PowerState/deallocating","PowerState/stopped","PowerState/stopping","PowerState/unknown" -contains $vm.powerState) {
+    } elseif( $vm_state_on -eq $true -and "PowerState/deallocated","PowerState/deallocating","PowerState/stopped","PowerState/stopping","PowerState/unknown" -contains $vm.powerState) {
         Write-Output "The vm will be turned on" 
         try{
             Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext
