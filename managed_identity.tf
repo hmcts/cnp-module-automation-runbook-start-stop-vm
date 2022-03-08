@@ -1,20 +1,25 @@
 ################## VM Automation account managed identity ##################
 # Create a user-assigned managed identity
 resource "azurerm_user_assigned_identity" "cvp-automation-account-mi" {
-  resource_group_name = local.resource_group_name
+  for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
+
+  resource_group_name = "${var.product}-recordings-${var.env}-rg"
   location            = var.location
-  name                = local.user_assigned_identity_name
+  name                = "${var.product}-automation-mi-${var.env}-${index(var.auto_acc_runbooks, each.value) + 1}"
   tags                = var.tags
+
 }
 
-output "cvp_aa_mi_id" {
+output "cvp_aa_mi_ids" {
   description = "user assigned id"
-  value       = azurerm_user_assigned_identity.cvp-automation-account-mi.id
+  value       = values(azurerm_user_assigned_identity.cvp-automation-account-mi)[*].id
 }
 
 # Create a custom, limited role for our managed identity
 resource "azurerm_role_definition" "virtual-machine-control" {
-  name        = local.role_definition_name
+  for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
+
+  name        = "${var.product}-vm-control-${var.env}-${index(var.auto_acc_runbooks, each.value) + 1}"
   scope       = var.resource_group_id
   description = "Custom Role for controlling virtual machines"
   permissions {
@@ -31,9 +36,11 @@ resource "azurerm_role_definition" "virtual-machine-control" {
 }
 # Assign the new role to the user assigned managed identity
 resource "azurerm_role_assignment" "cvp-auto-acct-mi-role" {
+  for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
+
   scope              = var.resource_group_id
-  role_definition_id = azurerm_role_definition.virtual-machine-control.role_definition_resource_id
-  principal_id       = azurerm_user_assigned_identity.cvp-automation-account-mi.principal_id
+  role_definition_id = azurerm_role_definition.virtual-machine-control[each.value.name].role_definition_resource_id
+  principal_id       = azurerm_user_assigned_identity.cvp-automation-account-mi[each.value.name].principal_id
 
   depends_on = [
     azurerm_role_definition.virtual-machine-control # Required otherwise terraform destroy will fail

@@ -6,33 +6,37 @@ variable "location" {
 variable "env" {
   type = string
 }
+variable "product" {
+  type = string
+}
 variable "tags" {
   type        = map(string)
   description = "Runbook Tags"
 }
 ## Azure Automation
+variable "auto_acc_runbooks" {
+  default = []
+}
+variable "resource_group_id" {
+  type = string
+}
+variable "resource_group_name" {
+  type = string
+}
 variable "automation_account_name" {
   type        = string
   description = "automation account name"
 }
-variable "publish_content_link" {
+variable "script_name" {
   type        = string
-  description = "source of ps1 script"
+  description = "runbook name"
+  default     = ""
 }
-variable "azdo_pipe_to_change_vm_status" {
-  description = "Should azdo pipeline change the status of the VMs"
-  default     = false
+variable "timezone" {
+  type    = string
+  default = "Europe/London"
 }
-variable "vm_resting_state_on" {
-  description = "The desired resting state i.e. on/off for VMs"
-}
-variable "resource_group_id" {
-  type        = string
-  description = "resource group id"
-}
-variable "auto_acc_runbook_names" {
-  default = {}
-}
-variable "runbook_schedule_times" {
-  default = {}
+variable "vm_names" {
+  type    = string
+  default = ""
 }

@@ -14,13 +14,11 @@ Below is the standard example setup
 product = "cvp"
 env = "sbox"
 automation_account_sku_name = "Basic"
-script_name                   = "/.terraform/modules/vm_automation/vm-start-stop.ps1"
-vm_resting_state_on           = false
-azdo_pipe_to_change_vm_status = true
+script_name  = "./modules/automation-runbook-vm-shutdown/vm-start-stop.ps1"
 runbook_schedule_times = {
-  "frequency" = "Day"
-  "interval"  = 1
-  "timezone"  = "Europe/London"
+  "frequency"  = "Day"
+  "interval"   = 1
+  "timezone"   = "Europe/London"
 }
 ```
 
@@ -30,7 +28,6 @@ runbook_schedule_times = {
 # =================================================================
 
 resource "azurerm_automation_account" "vm-start-stop" {
-  count = var.azdo_pipe_to_change_vm_status == true ? 1 : 0
 
   name                = "${var.product}-recordings-${var.env}-aa"
   location            = var.location
@@ -49,16 +46,13 @@ resource "azurerm_automation_account" "vm-start-stop" {
 # ==========    vm shutdown/start runbook module    ===============
 # =================================================================
 module "vm_automation" {
-  count = var.azdo_pipe_to_change_vm_status == true ? 1 : 0
 
   source                        = "github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
   automation_account_name       = azurerm_automation_account.vm-start-stop[0].name
   location                      = var.location
   env                           = var.env
   resource_group_id             = module.wowza.wowza_rg_id
-  azdo_pipe_to_change_vm_status = var.azdo_pipe_to_change_vm_status
-  vm_resting_state_on           = var.vm_resting_state_on
-  runbook_schedule_times        = merge(var.runbook_schedule_times, { "start_time" = "${formatdate("YYYY-MM-DD", timestamp())}T19:00:00Z" })
+  runbook_schedule_times        = var.runbook_schedule_times
   publish_content_link          = "https://raw.githubusercontent.com/hmcts/cnp-module-automation-runbook-start-stop-vm/master/vm-start-stop.ps1"
   tags                          = local.common_tags
   auto_acc_runbook_names = {
