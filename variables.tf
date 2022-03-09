@@ -40,3 +40,7 @@ variable "vm_names" {
   type    = string
   default = ""
 }
+variable "mi_principal_id"{
+  type    = string  
+  default = "Managed identity principle id"
+}
