@@ -1,8 +1,6 @@
 ############ automation account  + runbook #############
 resource "azurerm_automation_runbook" "vm-start-stop" {
-  for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
-
-  name                    = "${var.product}-${each.value.name}-${var.env}"
+  name                    = "${var.product}-vm-status-change-${var.env}"
   location                = var.location
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
@@ -39,7 +37,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   schedule_name           = "${var.product}-recordings-schedule-${each.value.name}-${var.env}"
-  runbook_name            = azurerm_automation_runbook.vm-start-stop[each.value.name].name
+  runbook_name            = azurerm_automation_runbook.vm-start-stop.name
 
   parameters = {
     mi_principal_id = azurerm_user_assigned_identity.cvp-automation-account-mi.principal_id
