@@ -8,7 +8,7 @@ resource "azurerm_automation_runbook" "vm-start-stop" {
   log_progress            = "false"
   description             = "This is a powershell runbook used to stop and start ${var.product} VMs"
   runbook_type            = "PowerShell"
-  content                 = var.script_name == "" ? "Update ps1 location" : file("${path.module}${var.script_name}")
+  content                 = file("${path.module}${var.script_name}")
 
   tags = var.tags
 }
@@ -17,7 +17,7 @@ resource "azurerm_automation_runbook" "vm-start-stop" {
 resource "azurerm_automation_schedule" "vm-start-stop" {
   for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
 
-  name                    = "${var.product}-recordings-schedule-${each.value.name}-${var.env}"
+  name                    = "${var.product}-schedule-${each.value.name}-${var.env}"
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   frequency               = each.value.frequency
@@ -36,7 +36,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
 
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
-  schedule_name           = "${var.product}-recordings-schedule-${each.value.name}-${var.env}"
+  schedule_name           = "${var.product}-schedule-${each.value.name}-${var.env}"
   runbook_name            = azurerm_automation_runbook.vm-start-stop.name
 
   parameters = {

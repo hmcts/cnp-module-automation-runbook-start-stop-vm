@@ -12,59 +12,65 @@ Below is the standard example setup
 # =================        env tfvar         ======================
 # =================================================================
 product = "cvp"
-env = "sbox"
-automation_account_sku_name = "Basic"
-script_name  = "./modules/automation-runbook-vm-shutdown/vm-start-stop.ps1"
-runbook_schedule_times = {
-  "frequency"  = "Day"
-  "interval"   = 1
-  "timezone"   = "Europe/London"
-}
+env  = "sbox"
+location = "uksouth"
+auto_acc_runbooks = [
+  {
+    name        = "vm-on",
+    frequency   = "Day"
+    interval    = 1
+    start_time  = "T06:00:00Z"
+    vm_state_on = true
+  },
+  {
+    name        = "vm-off",
+    frequency   = "Day"
+    interval    = 1
+    start_time  = "T20:00:00Z"
+    vm_state_on = false
+  }
+]
 ```
+
 
 ```terraform
 # =================================================================
 # =================    automation account    ======================
 # =================================================================
-
 resource "azurerm_automation_account" "vm-start-stop" {
 
   name                = "${var.product}-recordings-${var.env}-aa"
   location            = var.location
   resource_group_name = "${var.product}-recordings-${var.env}-rg"
-  sku_name            = var.automation_account_sku_name
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [module.vm_automation[0].cvp_aa_mi_id]
+    identity_ids = [module.vm_automation.cvp_aa_mi_id]
   }
 
-  tags = local.common_tags
+  tags = var.common_tags
+}
+
+locals {
+  source = "${path.module}/vm_automation"
 }
 
 # =================================================================
 # ==========    vm shutdown/start runbook module    ===============
 # =================================================================
+#  vm shutdown/start runbook module
 module "vm_automation" {
+  source = "github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
 
-  source                        = "github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
-  automation_account_name       = azurerm_automation_account.vm-start-stop[0].name
-  location                      = var.location
-  env                           = var.env
-  resource_group_id             = module.wowza.wowza_rg_id
-  runbook_schedule_times        = var.runbook_schedule_times
-  publish_content_link          = "https://raw.githubusercontent.com/hmcts/cnp-module-automation-runbook-start-stop-vm/master/vm-start-stop.ps1"
-  tags                          = local.common_tags
-  auto_acc_runbook_names = {
-    resource_group_name         = "${var.product}-recordings-${var.env}-rg"
-    runbook_name                = "${var.product}-recordings-VM-start-stop-${var.env}"
-    schedule_name               = "${var.product}-recordings-schedule-${var.env}"
-    job_schedule_name           = "${var.product}-recordings-schedule-${var.env}"
-    user_assigned_identity_name = "${var.product}-recordings-automation-mi-${var.env}"
-    role_definition_name        = "${var.product}-recordings-vm-control-${var.env}"
-    script_name                 = "${path.module}${var.script_name}"
-    vm_names                    = join(",", [module.wowza.vm1_name, module.wowza.vm2_name])
-  }
+  product                 = var.product
+  env                     = var.env
+  location                = var.location
+  automation_account_name = azurerm_automation_account.vm-start-stop.name
+  tags                    = var.common_tags
+  auto_acc_runbooks       = var.auto_acc_runbooks
+  resource_group_id       = azurerm_resource_group.rg.id
+  resource_group_name     = azurerm_resource_group.rg.name
+  vm_names                = join(",", [azurerm_linux_virtual_machine.vm1.name, azurerm_linux_virtual_machine.vm2.name])
 }
 
 

@@ -29,8 +29,8 @@ variable "automation_account_name" {
 }
 variable "script_name" {
   type        = string
-  description = "runbook name"
-  default     = ""
+  description = "runbook script name"
+  default     = "/vm-start-stop.ps1"
 }
 variable "timezone" {
   type    = string

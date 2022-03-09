@@ -1,7 +1,7 @@
 ################## VM Automation account managed identity ##################
 # Create a user-assigned managed identity
 resource "azurerm_user_assigned_identity" "cvp-automation-account-mi" {
-  resource_group_name = "${var.product}-recordings-${var.env}-rg"
+  resource_group_name = "${var.product}-${var.env}-rg"
   location            = var.location
   name                = "${var.product}-automation-mi-${var.env}"
   tags                = var.tags
