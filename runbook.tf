@@ -23,7 +23,7 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   frequency               = each.value.frequency
   interval                = each.value.interval
   timezone                = var.timezone
-  start_time              = each.value.start_time == null ? "${formatdate("YYYY-MM-DD", timestamp())}T19:00:00Z" : each.value.start_time
+  start_time              = each.value.start_time == null ? "${formatdate("YYYY-MM-DD",timeadd(timestamp(), "24h"))}T19:00:00Z" : "${formatdate("YYYY-MM-DD",timeadd(timestamp(), "24h"))}${each.value.start_time}"
   description             = each.value.start_time == null ? "This is a schedule to ${each.value.name} at ${formatdate("YYYY-MM-DD", timestamp())}T19:00:00Z" : "This is a scheduled to ${each.value.name} at ${each.value.start_time}"
 
   depends_on = [
