@@ -42,7 +42,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
 
   parameters = {
     mi_principal_id = var.mi_principal_id
-    vmlist          = var.vm_names
+    vmlist          = join(",", var.vm_names)
     resourcegroup   = var.resource_group_name
     start_vm        = each.value.start_vm
   }
