@@ -21,14 +21,12 @@ module "vm_automation" {
   automation_account_name = "xyz-sbox-aa"
   auto_acc_runbooks       = [
                               {
-                                name        = "vm-on",
                                 frequency   = "Day"
                                 interval    = 1
                                 run_time    = "06:00:00"
                                 start_vm    = true
                               },
                               {
-                                name        = "vm-off",
                                 frequency   = "Day"
                                 interval    = 1
                                 run_time    = formatdate("HH:mm:ss", timestamp())
