@@ -32,7 +32,7 @@ variable "vm_names" {
   type    = list(string)
   default = ""
 }
-variable "mi_principal_id"{
-  type    = string  
+variable "mi_principal_id" {
+  type    = string
   default = "Managed identity principle id"
 }
