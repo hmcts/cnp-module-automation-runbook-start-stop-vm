@@ -31,7 +31,7 @@ module "vm_automation" {
                                 name        = "vm-off",
                                 frequency   = "Day"
                                 interval    = 1
-                                run_time    = "20:00:00"
+                                run_time    = formatdate("HH:mm:ss", timestamp())
                                 start_vm    = false
                               }
                             ]
