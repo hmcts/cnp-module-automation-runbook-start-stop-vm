@@ -13,7 +13,7 @@ Below is the standard example setup
 # =================================================================
 #  vm shutdown/start runbook module
 module "vm_automation" {
-  source = "github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
+  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
 
   product                 = "xyz"
   env                     = "sbox"
