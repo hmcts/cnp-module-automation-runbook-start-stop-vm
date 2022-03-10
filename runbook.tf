@@ -16,7 +16,7 @@ resource "azurerm_automation_runbook" "vm-start-stop" {
 
 ################# automation schedule #################
 resource "azurerm_automation_schedule" "vm-start-stop" {
-  for_each = var.auto_acc_runbooks 
+  for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
 
   name                    = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}-${var.env}"
   resource_group_name     = var.resource_group_name
@@ -33,7 +33,7 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
 }
 
 resource "azurerm_automation_job_schedule" "vm-start-stop" {
-  for_each = var.auto_acc_runbooks
+  for_each = { for aa_acc_runbook in var.auto_acc_runbooks : aa_acc_runbook.name => aa_acc_runbook }
 
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
