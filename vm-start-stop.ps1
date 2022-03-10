@@ -3,7 +3,7 @@ Param(
     [String] 
     $mi_principal_id,
     [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()]
-	[string]
+	[string[]]
     $vmlist,
     [Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()] 
     [String] 
@@ -23,12 +23,12 @@ $AzureContext = (Connect-AzAccount -Identity -AccountId $mi_principal_id).contex
 # set and store context
 $AzureContext = Set-AzContext -SubscriptionName $AzureContext.Subscription -DefaultProfile $AzureContext
 # Separate our vmlist into an array we can iterate over
-$VMssplit = $vmlist.Split(",") 
-[System.Collections.ArrayList]$VMs = $VMssplit
+        # $VMssplit = $vmlist.Split(",") 
+        # [System.Collections.ArrayList]$VMs = $VMssplit
 
 # Loop through one or more VMs which will be passed in from the terraform as a list
 # If the list is empty it will skip the block
-foreach ($VM in $VMs){
+foreach ($VM in $vmlist){
     try { # Get status of VM
     $status = (Get-AzVM -ResourceGroupName $resourcegroup -Name $VM -Status -DefaultProfile $AzureContext).Statuses[1].Code
     Write-Output "Initial VM status for '$VM'= $status"
