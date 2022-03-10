@@ -30,7 +30,7 @@ variable "timezone" {
 }
 variable "vm_names" {
   type    = list(string)
-  default = ""
+  default = []
 }
 variable "mi_principal_id" {
   type    = string
