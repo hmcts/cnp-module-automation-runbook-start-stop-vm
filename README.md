@@ -69,15 +69,11 @@ No modules.
 | [azurerm_automation_runbook.vm-start-stop](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_runbook) | resource |
 | [azurerm_automation_schedule.vm-start-stop](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_schedule) | resource |
 | [azurerm_automation_job_schedule.vm-start-stop](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/automation_job_schedule) | resource |
-| [azurerm_user_assigned_identity.automation-account-mi](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
-| [azurerm_role_definition.virtual-machine-control](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_definition) | resource |
-| [azurerm_role_assignment.cvp-auto-acct-mi-role](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-
 | product | Product name | `string` | n/a | yes |  
 | env | Environment | `string` | n/a | yes |  
 | location | Location | `string` | uksouth | no |  
@@ -85,13 +81,11 @@ No modules.
 | resource_group_id | Resource group id | `string` | n/a | yes |  
 | resource_group_name | Resource group name | `string` | n/a | yes |  
 | auto_acc_runbooks | Object containaing schedules name, frequency, interval, start time and desired state | `object` | n/a | yes |  
-| vm_names | Names of VMs to apply runbook to | `string` | n/a | no |  
+| vm_names | Names of VMs to apply runbook to | `string` | "" | no |  
 | timezone | timezone | `string` | Europe/London | no |  
 | script_name | Script name | `string` | /vm-start-stop.ps1 | no |  
 | tags | Runbook Tags | `map(string)` | n/a | yes |
 
 ## Outputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| aa_mi_id | Automation account managed identity id | `string` | n/a | n/a |   
+n/a
