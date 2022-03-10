@@ -25,21 +25,18 @@ module "vm_automation" {
                                 frequency   = "Day"
                                 interval    = 1
                                 start_time  = "T06:00:00Z"
-                                vm_state_on = true
+                                start_vm = true
                               },
                               {
                                 name        = "vm-off",
                                 frequency   = "Day"
                                 interval    = 1
                                 start_time  = "T20:00:00Z"
-                                vm_state_on = false
+                                start_vm = false
                               }
                             ]
-  resource_group_id       = "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/xyz-sbox-rg"
   resource_group_name     = "xyz-sbox-rg"
   vm_names                = join(",", ["xyz-sbox-vm1", "xyz-sbox-vm2"])
-  timezone                = "Europe/London"
-  script_name             = "/vm-start-stop.ps1"
   tags                    = var.common_tags
 }
 
@@ -78,12 +75,10 @@ No modules.
 | env | Environment | `string` | n/a | yes |  
 | location | Location | `string` | uksouth | no |  
 | automation_account_name | Automation account name | `string` | n/a | yes |   
-| resource_group_id | Resource group id | `string` | n/a | yes |  
 | resource_group_name | Resource group name | `string` | n/a | yes |  
 | auto_acc_runbooks | Object containaing schedules name, frequency, interval, start time and desired state | `object` | n/a | yes |  
 | vm_names | Names of VMs to apply runbook to | `string` | "" | no |  
 | timezone | timezone | `string` | Europe/London | no |  
-| script_name | Script name | `string` | /vm-start-stop.ps1 | no |  
 | tags | Runbook Tags | `map(string)` | n/a | yes |
 
 ## Outputs
