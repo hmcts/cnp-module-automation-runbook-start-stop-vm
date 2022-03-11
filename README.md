@@ -21,19 +21,21 @@ module "vm_automation" {
   location                = "uksouth"
   automation_account_name = "xyz-sbox-aa"
   schedules       = [
-                              {
-                                frequency   = "Day"
-                                interval    = 1
-                                run_time    = "06:00:00"
-                                start_vm    = true
-                              },
-                              {
-                                frequency   = "Day"
-                                interval    = 1
-                                run_time    = formatdate("HH:mm:ss", timestamp())
-                                start_vm    = false
-                              }
-                            ]
+                      {
+                        name        = "vm-on"
+                        frequency   = "Day"
+                        interval    = 1
+                        run_time    = "06:00:00"
+                        start_vm    = true
+                      },
+                      {
+                        name        = "vm-off"
+                        frequency   = "Day"
+                        interval    = 1
+                        run_time    = formatdate("HH:mm:ss", timestamp())
+                        start_vm    = false
+                      }
+                     ]
   resource_group_name     = "xyz-sbox-rg"
   vm_names                = ["xyz-sbox-vm1", "xyz-sbox-vm2"]
   tags                    = var.common_tags
