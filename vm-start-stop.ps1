@@ -51,6 +51,9 @@ foreach ($VM in $VMs){
         Write-Output "The vm will be turned on" 
         try{
             Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext
+            $ScriptToRun = "/home/wowza/runcmd.sh"
+            Out-File -InputObject $ScriptToRun -FilePath script.sh
+            Invoke-AzVMRunCommand -ResourceGroupName $resourcegroup -VMName $VM -CommandId 'RunShellScript' -ScriptPath script.sh
         } catch {
             $ErrorMessage = $_.Exception.message
             Write-Error ("Error starting the VM $VM : " + $ErrorMessage)

@@ -14,7 +14,7 @@ variable "tags" {
   description = "Runbook Tags"
 }
 ## Azure Automation
-variable "auto_acc_runbooks" {
+variable "schedules" {
   default = []
 }
 variable "resource_group_name" {
