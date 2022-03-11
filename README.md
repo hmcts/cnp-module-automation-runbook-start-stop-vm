@@ -2,7 +2,7 @@
 
 This module is to setup a Azure Automation Runbook to start or stop VMs within an existing AUtomation Account.
 
-Runbooks will be schuled to begin the day after the pipeline is run. 
+Runbooks will be scheduled to begin the day after the pipeline is run. 
 
 ## Example
 
