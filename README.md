@@ -76,7 +76,7 @@ No modules.
 | automation_account_name | Automation account name | `string` | n/a | yes |   
 | resource_group_name | Resource group name | `string` | n/a | yes |  
 | schedules | Object containaing schedules name, frequency, interval, start time and desired state | `object` | n/a | yes |  
-| vm_names | Names of VMs to apply runbook to | `string` | "" | no |  
+| vm_names | Names of VMs to apply runbook to | `array` | [] | no |  
 | timezone | timezone | `string` | Europe/London | no |  
 | tags | Runbook Tags | `map(string)` | n/a | yes |
 
