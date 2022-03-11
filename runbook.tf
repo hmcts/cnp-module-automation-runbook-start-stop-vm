@@ -36,7 +36,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
 
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
-  schedule_name           = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}-${var.env}"
+  schedule_name           = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}"
   runbook_name            = azurerm_automation_runbook.vm-start-stop.name
 
   parameters = {
