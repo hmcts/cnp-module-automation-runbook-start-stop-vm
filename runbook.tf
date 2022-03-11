@@ -1,11 +1,3 @@
-output "timestamp" {
-  value = formatdate("YYYYMMDDhhmmss", timestamp())
-
-  currentTimePlusHour = formatdate("YYYYMMDDhhmmss", timeadd(timestamp(), "1h"))
-}
-
-
-
 ############ automation account  + runbook #############
 resource "azurerm_automation_runbook" "vm-start-stop" {
   name                    = "${var.product}-vm-status-change-${var.env}"
