@@ -47,7 +47,7 @@ foreach ($VM in $VMs){
             Write-Error ("Error stopping the VM $VM : " + $ErrorMessage)
             Break
         }
-    } elseif( $start_vm -eq $true -and "PowerState/deallocated","PowerState/deallocating","PowerState/stopped","PowerState/stopping","PowerState/unknown" -contains $vm.powerState) {
+    } elseif( $start_vm -eq $true -and "PowerState/deallocated","PowerState/deallocating","PowerState/stopped","PowerState/stopping","PowerState/unknown" -contains $status) {
         Write-Output "The vm will be turned on" 
         try{
             Start-AzVM -Name $VM -ResourceGroupName $resourcegroup -DefaultProfile $AzureContext
