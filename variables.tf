@@ -21,6 +21,7 @@ variable "schedules" {
     interval  = number
     run_time  = string
     start_vm  = bool
+    week_days = list(string)
   }))
   default = []
 }
