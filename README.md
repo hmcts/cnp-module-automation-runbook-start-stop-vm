@@ -44,6 +44,46 @@ module "vm_automation" {
 
 ```
 
+Below is an example of a mon-friday schedule
+
+```terraform
+# =================================================================
+# ==========    vm shutdown/start runbook module    ===============
+# =================================================================
+#  vm shutdown/start runbook module
+module "vm_automation" {
+  source = "git::https://github.com/hmcts/cnp-module-automation-runbook-start-stop-vm"
+
+  product                 = "xyz"
+  env                     = "sbox"
+  location                = "uksouth"
+  automation_account_name = "xyz-sbox-aa"
+  schedules       = [
+                      {
+                        name        = "vm-on"
+                        frequency   = "Week"
+                        interval    = 1
+                        run_time    = "06:00:00"
+                        start_vm    = true
+                        week_days   = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+                      },
+                      {
+                        name        = "vm-off"
+                        frequency   = "Week"
+                        interval    = 1
+                        run_time    = formatdate("HH:mm:ss", timestamp())
+                        start_vm    = false
+                        week_days   = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+                      }
+                     ]
+  resource_group_name     = "xyz-sbox-rg"
+  vm_names                = ["xyz-sbox-vm1", "xyz-sbox-vm2"]
+  tags                    = var.common_tags
+}
+
+
+```
+
 ## Requirements   
 
 | Name | Version |
