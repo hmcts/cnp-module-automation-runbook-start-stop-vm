@@ -131,8 +131,8 @@ No modules.
 | run_time | Time the schedule should run | `string` | n/a | yes |
 | start_vm | What action to be taken `true` to start VM, `false` to shutdown VM | `bool` | n/a | yes |
 | week_days | List of days of the week that the job should execute on. Only valid when frequency is `Week` | `list` | n/a | no |
-| month_days | List of days of the month that the job should execute on. Must be between `1` and `31`. `-1` for last day of the month. Only valid when frequency is `Month` | `list` | n/a | yes |
-| monthly_occurrence | List of occurrences of days within a month | `monthly_occurrence object` | n/a | yes |
+| month_days | List of days of the month that the job should execute on. Must be between `1` and `31`. `-1` for last day of the month. Only valid when frequency is `Month` | `list` | n/a | no |
+| monthly_occurrence | List of occurrences of days within a month | `monthly_occurrence object` | n/a | no |
 
 ### monthly_occurrence object
 | Name | Description | Type | Default | Required |
