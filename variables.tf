@@ -16,12 +16,17 @@ variable "tags" {
 ## Azure Automation
 variable "schedules" {
   type = list(object({
-    name      = string
-    frequency = string
-    interval  = number
-    run_time  = string
-    start_vm  = bool
-    week_days = optional(list(string), null)
+    name               = string
+    frequency          = string
+    interval           = number
+    run_time           = string
+    start_vm           = bool
+    week_days          = optional(list(string))
+    month_days         = optional(list(number))
+    monthly_occurrence = optional(object({
+      day        = string
+      occurrence = number
+    }))
   }))
   default = []
 }
