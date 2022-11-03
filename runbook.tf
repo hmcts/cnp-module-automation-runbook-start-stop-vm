@@ -23,7 +23,19 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   frequency               = each.value.frequency
   week_days               = each.value.frequency == "Week" ? each.value.week_days : null
   month_days              = each.value.frequency == "Month" ? each.value.month_days : null
-  monthly_occurrence      = each.value.frequency == "Month" ? each.value.monthly_occurrence : null
+  dynamic monthly_occurrence {
+    for_each = each.value.frequency == "Month" && each.value.month_days == null ? [1] : []
+    
+    # [
+    #   for mo in each.value : mo.monthly_occurrence
+    #   if each.value.frequency == "Month" && each.value.month_days == null
+    # ]
+    content {
+      day        = each.value.monthly_occurrence.day
+      occurrence = each.value.monthly_occurrence.occurrence
+    }
+  }
+
   interval                = each.value.interval
   timezone                = var.timezone
   start_time              = "${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T${each.value.run_time}Z"

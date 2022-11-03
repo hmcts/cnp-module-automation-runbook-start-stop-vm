@@ -65,7 +65,7 @@ module "vm_automation" {
                         interval    = 1
                         run_time    = "06:00:00"
                         start_vm    = true
-                        week_days   = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+                        week_days   = ["Monday","Tuesday","Wednesday","Thursday","Friday"]
                       },
                       {
                         name        = "vm-off"
@@ -73,7 +73,7 @@ module "vm_automation" {
                         interval    = 1
                         run_time    = formatdate("HH:mm:ss", timestamp())
                         start_vm    = false
-                        week_days   = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+                        week_days   = ["Monday","Tuesday","Wednesday","Thursday","Friday"]
                       }
                      ]
   resource_group_name     = "xyz-sbox-rg"
