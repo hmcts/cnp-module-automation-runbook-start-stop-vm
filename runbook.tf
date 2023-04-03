@@ -23,9 +23,9 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   frequency               = each.value.frequency
   week_days               = each.value.frequency == "Week" ? each.value.week_days : null
   month_days              = each.value.frequency == "Month" ? each.value.month_days : null
-  dynamic monthly_occurrence {
+  dynamic "monthly_occurrence" {
     for_each = each.value.frequency == "Month" && each.value.month_days == null ? [1] : []
-    
+
     # [
     #   for mo in each.value : mo.monthly_occurrence
     #   if each.value.frequency == "Month" && each.value.month_days == null
@@ -36,10 +36,10 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
     }
   }
 
-  interval                = each.value.interval
-  timezone                = var.timezone
-  start_time              = "${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T${each.value.run_time}Z"
-  description             = "Schedule to ${each.value.start_vm == true ? "start" : "stop"} vm at ${each.value.run_time}"
+  interval    = each.value.interval
+  timezone    = var.timezone
+  start_time  = "${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T${each.value.run_time}Z"
+  description = "Schedule to ${each.value.start_vm == true ? "start" : "stop"} vm at ${each.value.run_time}"
 
   depends_on = [
     azurerm_automation_runbook.vm-start-stop

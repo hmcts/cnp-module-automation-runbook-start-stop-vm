@@ -16,13 +16,13 @@ variable "tags" {
 ## Azure Automation
 variable "schedules" {
   type = list(object({
-    name               = string
-    frequency          = string
-    interval           = number
-    run_time           = string
-    start_vm           = bool
-    week_days          = optional(list(string))
-    month_days         = optional(list(number))
+    name       = string
+    frequency  = string
+    interval   = number
+    run_time   = string
+    start_vm   = bool
+    week_days  = optional(list(string))
+    month_days = optional(list(number))
     monthly_occurrence = optional(object({
       day        = optional(string)
       occurrence = optional(number)
@@ -33,7 +33,7 @@ variable "schedules" {
   validation { # Check no interval for OneTime
     condition = alltrue(flatten([
       for s in var.schedules : can(s.interval) == false
-      if s.frequency == "OneTime" 
+      if s.frequency == "OneTime"
     ]))
     error_message = "Cannot provide an interval when using 'oneTime'"
   }
@@ -51,7 +51,7 @@ variable "schedules" {
     ])
     error_message = "'run_time' must be be in the format 'HH:MM:SS'."
   }
-  
+
   validation { # Check valid week days
     condition = alltrue(flatten([
       for s in var.schedules : [
@@ -65,8 +65,8 @@ variable "schedules" {
   validation { # Check month numbers are in range
     condition = alltrue(flatten([
       for s in var.schedules : [
-          for d in s.month_days : (d >= -1 && d <=31)
-        ]
+        for d in s.month_days : (d >= -1 && d <= 31)
+      ]
       if s.frequency == "Month" && s.month_days != null
     ]))
     error_message = "You must provide a valid 'month_days' option when using a frequency of 'Month', valid options are: 1 - 31 or -1 (for last day of the month)."
@@ -74,18 +74,18 @@ variable "schedules" {
 
   validation { # Check for valid monthly_occurrence.day
     condition = alltrue([
-      for s in var.schedules : 
-        contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], s.monthly_occurrence.day)
-        if s.frequency == "Month" && s.monthly_occurrence != null
+      for s in var.schedules :
+      contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], s.monthly_occurrence.day)
+      if s.frequency == "Month" && s.monthly_occurrence != null
     ])
     error_message = "'monthly_occurrence.day' must be one of the following: 'Monday', 'Tuesday', 'Wednesday', 'Thursday' or 'Friday'"
   }
 
   validation { # Check for valid monthly_occurrence.occurrence
     condition = alltrue([
-      for s in var.schedules : 
-        s.monthly_occurrence.occurrence >= -1 && s.monthly_occurrence.occurrence <= 5
-        if s.frequency == "Month" && s.monthly_occurrence != null
+      for s in var.schedules :
+      s.monthly_occurrence.occurrence >= -1 && s.monthly_occurrence.occurrence <= 5
+      if s.frequency == "Month" && s.monthly_occurrence != null
     ])
     error_message = "Occurrence of the week within the month must be between 1 and 5 or -1 for last week within the month."
   }
