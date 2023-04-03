@@ -21,10 +21,25 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   frequency               = each.value.frequency
-  interval                = each.value.interval
-  timezone                = var.timezone
-  start_time              = "${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T${each.value.run_time}Z"
-  description             = "Schedule to ${each.value.start_vm == true ? "start" : "stop"} vm at ${each.value.run_time}"
+  week_days               = each.value.frequency == "Week" ? each.value.week_days : null
+  month_days              = each.value.frequency == "Month" ? each.value.month_days : null
+  dynamic "monthly_occurrence" {
+    for_each = each.value.frequency == "Month" && each.value.month_days == null ? [1] : []
+
+    # [
+    #   for mo in each.value : mo.monthly_occurrence
+    #   if each.value.frequency == "Month" && each.value.month_days == null
+    # ]
+    content {
+      day        = each.value.monthly_occurrence.day
+      occurrence = each.value.monthly_occurrence.occurrence
+    }
+  }
+
+  interval    = each.value.interval
+  timezone    = var.timezone
+  start_time  = "${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T${each.value.run_time}Z"
+  description = "Schedule to ${each.value.start_vm == true ? "start" : "stop"} vm at ${each.value.run_time}"
 
   depends_on = [
     azurerm_automation_runbook.vm-start-stop
