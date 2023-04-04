@@ -17,7 +17,7 @@ resource "azurerm_automation_runbook" "vm-start-stop" {
 resource "azurerm_automation_schedule" "vm-start-stop" {
   for_each = { for schedule in var.schedules : schedule.name => schedule }
 
-  name                    = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}"
+  name                    = "${var.product}-${each.value.name}-${replace(each.value.run_time, ":", "-")}"
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   frequency               = each.value.frequency
@@ -25,11 +25,6 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   month_days              = each.value.frequency == "Month" ? each.value.month_days : null
   dynamic "monthly_occurrence" {
     for_each = each.value.frequency == "Month" && each.value.month_days == null ? [1] : []
-
-    # [
-    #   for mo in each.value : mo.monthly_occurrence
-    #   if each.value.frequency == "Month" && each.value.month_days == null
-    # ]
     content {
       day        = each.value.monthly_occurrence.day
       occurrence = each.value.monthly_occurrence.occurrence

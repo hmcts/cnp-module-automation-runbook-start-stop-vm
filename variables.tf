@@ -52,16 +52,6 @@ variable "schedules" {
     error_message = "'run_time' must be be in the format 'HH:MM:SS'."
   }
 
-  validation { # Check valid week days
-    condition = alltrue(flatten([
-      for s in var.schedules : [
-        for d in s.week_days : contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], d)
-      ]
-      if s.frequency == "Week" && s.week_days != null
-    ]))
-    error_message = "Must provide a valid 'week_days' option when using a frequency of 'Week', valid options are: 'Monday', 'Tuesday', 'Wednesday', 'Thursday' or 'Friday'."
-  }
-
   validation { # Check month numbers are in range
     condition = alltrue(flatten([
       for s in var.schedules : [
