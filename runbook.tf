@@ -21,7 +21,7 @@ resource "azurerm_automation_schedule" "vm-start-stop" {
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   frequency               = each.value.frequency
-  week_days               = each.value.frequency == "Week" ? [each.value.week_days] : null
+  week_days               = each.value.frequency == "Week" ? each.value.week_days : null
   interval                = each.value.interval
   timezone                = var.timezone
   start_time              = "${formatdate("YYYY-MM-DD", timeadd(timestamp(), "24h"))}T${each.value.run_time}Z"
@@ -37,7 +37,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
 
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
-  schedule_name           = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}"
+  schedule_name           = "${var.product}-${each.value.name}-${replace(each.value.run_time, ":", "-")}"
   runbook_name            = azurerm_automation_runbook.vm-start-stop.name
 
   parameters = {
