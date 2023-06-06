@@ -55,11 +55,11 @@ variable "schedules" {
   validation { # Check valid week days
     condition = alltrue(flatten([
       for s in var.schedules : [
-        for d in s.week_days : contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], d)
+        for d in s.week_days : contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], d)
       ]
       if s.frequency == "Week" && s.week_days != null
     ]))
-    error_message = "Must provide a valid 'week_days' option when using a frequency of 'Week', valid options are: 'Monday', 'Tuesday', 'Wednesday', 'Thursday' or 'Friday'."
+    error_message = "Must provide a valid 'week_days' option when using a frequency of 'Week', valid options are: 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'."
   }
 
   validation { # Check month numbers are in range
@@ -75,10 +75,10 @@ variable "schedules" {
   validation { # Check for valid monthly_occurrence.day
     condition = alltrue([
       for s in var.schedules :
-      contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], s.monthly_occurrence.day)
+      contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], s.monthly_occurrence.day)
       if s.frequency == "Month" && s.monthly_occurrence != null
     ])
-    error_message = "'monthly_occurrence.day' must be one of the following: 'Monday', 'Tuesday', 'Wednesday', 'Thursday' or 'Friday'"
+    error_message = "'monthly_occurrence.day' must be one of the following: 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'."
   }
 
   validation { # Check for valid monthly_occurrence.occurrence

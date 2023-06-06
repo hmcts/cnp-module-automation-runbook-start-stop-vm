@@ -17,7 +17,7 @@ resource "azurerm_automation_runbook" "vm-start-stop" {
 resource "azurerm_automation_schedule" "vm-start-stop" {
   for_each = { for schedule in var.schedules : schedule.name => schedule }
 
-  name                    = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}"
+  name                    = "${var.product}-${each.value.name}-${replace(each.value.run_time, ":", "-")}"
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   frequency               = each.value.frequency
@@ -51,7 +51,7 @@ resource "azurerm_automation_job_schedule" "vm-start-stop" {
 
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
-  schedule_name           = "${var.product}-schedule-${each.value.start_vm == true ? "start" : "stop"}-vm-${replace(each.value.run_time, ":", "-")}"
+  schedule_name           = "${var.product}-${each.value.name}-${replace(each.value.run_time, ":", "-")}"
   runbook_name            = azurerm_automation_runbook.vm-start-stop.name
 
   parameters = {
