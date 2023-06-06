@@ -6,7 +6,7 @@ Runbooks will be scheduled to begin the day after the pipeline is run.
 
 ## Example
 
-Below is the standard example setup
+Below is the standard example setup.
 
 ```terraform
 # =================================================================
